@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { Crown } from "lucide-react";
-import { Logo } from "../shared/Logo";
+import { Logo, BRAND_GRADIENT } from "../shared/Logo";
 import { Button } from "../ui/button";
 import { useEntitlement } from "../../state/EntitlementContext";
 import { useUpgrade } from "../monetization/UpgradeModal";
@@ -42,7 +42,12 @@ export function Navbar() {
               Go Pro
             </Button>
           )}
-          <Button size="sm" onClick={() => navigate("/builder")}>
+          <Button
+            size="sm"
+            onClick={() => navigate("/builder")}
+            className="border-0 text-white"
+            style={{ background: BRAND_GRADIENT }}
+          >
             Start building
           </Button>
         </div>

@@ -8,6 +8,7 @@ import type { ChatMessage } from "../../state/AIContext";
 import { useBuilder } from "../../state/BuilderContext";
 import type { ResumeData } from "../../lib/types";
 import { FileDropzone } from "./FileDropzone";
+import { BRAND_GRADIENT } from "../shared/Logo";
 
 const QUICK = ["Write my summary", "Improve my bullets", "Suggest skills"];
 
@@ -33,13 +34,16 @@ export function AssistantPanel() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2 border-b border-border px-4 py-3">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+      <div
+        className="flex items-center gap-2.5 px-4 py-3.5 text-white"
+        style={{ background: BRAND_GRADIENT }}
+      >
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20">
           <Sparkles className="h-4 w-4" />
         </span>
         <div>
-          <div className="font-medium">AI Assistant</div>
-          <div className="text-xs text-muted-foreground">
+          <div className="font-semibold">AI Assistant</div>
+          <div className="text-xs text-white/80">
             Drafts, edits & imports your resume
           </div>
         </div>
@@ -81,7 +85,13 @@ export function AssistantPanel() {
               }
             }}
           />
-          <Button onClick={submit} disabled={pending} size="icon">
+          <Button
+            onClick={submit}
+            disabled={pending}
+            size="icon"
+            className="border-0 text-white"
+            style={{ background: BRAND_GRADIENT }}
+          >
             <Send className="h-4 w-4" />
           </Button>
         </div>
@@ -102,18 +112,18 @@ function MessageBubble({
     <div className={`flex gap-2 ${isUser ? "flex-row-reverse" : ""}`}>
       <span
         className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full ${
-          isUser ? "bg-primary text-primary-foreground" : "bg-muted"
+          isUser ? "text-white" : "bg-muted text-foreground"
         }`}
+        style={isUser ? { background: BRAND_GRADIENT } : undefined}
       >
         {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
       </span>
       <div className={`max-w-[80%] space-y-2 ${isUser ? "text-right" : ""}`}>
         <div
           className={`inline-block whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm ${
-            isUser
-              ? "bg-primary text-primary-foreground"
-              : "bg-muted text-foreground"
+            isUser ? "text-white" : "bg-muted text-foreground"
           }`}
+          style={isUser ? { background: BRAND_GRADIENT } : undefined}
         >
           {message.text}
         </div>
@@ -132,12 +142,14 @@ function MessageBubble({
             </p>
             <Button
               size="sm"
+              className="border-0 text-white"
+              style={{ background: BRAND_GRADIENT }}
               onClick={() => {
                 onApply(message.suggestion ?? {});
                 toast.success("Applied to your resume");
               }}
             >
-              Apply suggestion
+              <Wand2 className="h-3.5 w-3.5" /> Apply suggestion
             </Button>
           </div>
         )}

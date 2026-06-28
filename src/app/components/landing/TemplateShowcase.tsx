@@ -17,7 +17,7 @@ export function TemplateShowcase() {
   return (
     <section id="templates" className="mx-auto max-w-6xl px-5 py-16">
       <div className="mb-10 text-center">
-        <h2 className="text-3xl font-semibold tracking-tight">
+        <h2 className="font-serif text-4xl tracking-tight">
           Templates for every style
         </h2>
         <p className="mt-2 text-muted-foreground">

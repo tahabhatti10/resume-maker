@@ -4,6 +4,7 @@ import { useEntitlement } from "../../state/EntitlementContext";
 import { useUpgrade } from "../monetization/UpgradeModal";
 import { templates } from "../../lib/templates";
 import { ProBadge } from "../monetization/ProBadge";
+import { BRAND_GRADIENT } from "../shared/Logo";
 import { Label } from "../ui/label";
 import type { FontChoice, DensityChoice } from "../../lib/types";
 
@@ -69,7 +70,10 @@ export function DesignStep() {
                   {t.description}
                 </p>
                 {selected && (
-                  <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                  <span
+                    className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full text-white"
+                    style={{ background: BRAND_GRADIENT }}
+                  >
                     <Check className="h-3 w-3" />
                   </span>
                 )}
@@ -154,10 +158,9 @@ function Segment({
     <button
       onClick={onClick}
       className={`rounded-lg border px-3 py-1.5 text-sm transition ${
-        active
-          ? "border-primary bg-primary text-primary-foreground"
-          : "border-border hover:bg-muted"
+        active ? "border-transparent text-white" : "border-border hover:bg-muted"
       }`}
+      style={active ? { background: BRAND_GRADIENT } : undefined}
     >
       {children}
     </button>

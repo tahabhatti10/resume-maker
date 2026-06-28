@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
 import { useEntitlement } from "../../state/EntitlementContext";
 import { useUpgrade } from "../monetization/UpgradeModal";
+import { BRAND_GRADIENT } from "../shared/Logo";
 
 const PLANS = [
   {
@@ -14,7 +15,8 @@ const PLANS = [
     features: [
       "3 professional templates",
       "Live preview & customization",
-      "Download standalone HTML",
+      "Unlimited HTML export",
+      "3 free PDF exports",
       "Supported by ads",
     ],
   },
@@ -28,7 +30,7 @@ const PLANS = [
       "Everything in Free",
       "All premium templates",
       "Unlimited AI assistant + imports",
-      "Ad-free & one-click deploy",
+      "Unlimited ad-free PDF exports",
     ],
   },
 ];
@@ -41,7 +43,7 @@ export function PricingTeaser() {
   return (
     <section className="mx-auto max-w-5xl px-5 py-16">
       <div className="mb-10 text-center">
-        <h2 className="text-3xl font-semibold tracking-tight">
+        <h2 className="font-serif text-4xl tracking-tight">
           Simple, honest pricing
         </h2>
         <p className="mt-2 text-muted-foreground">
@@ -52,16 +54,28 @@ export function PricingTeaser() {
         {PLANS.map((p) => (
           <div
             key={p.name}
-            className={`rounded-2xl border p-7 ${
-              p.pro
-                ? "border-primary bg-card shadow-lg"
-                : "border-border bg-card"
+            className={`relative overflow-hidden rounded-2xl border p-7 ${
+              p.pro ? "bg-card shadow-xl" : "border-border bg-card"
             }`}
+            style={
+              p.pro
+                ? { borderColor: "transparent", boxShadow: "0 18px 50px -20px rgba(124,58,237,0.45)" }
+                : undefined
+            }
           >
+            {p.pro && (
+              <div
+                className="absolute inset-x-0 top-0 h-1.5"
+                style={{ background: BRAND_GRADIENT }}
+              />
+            )}
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium">{p.name}</h3>
               {p.pro && (
-                <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs text-primary">
+                <span
+                  className="rounded-full px-2.5 py-0.5 text-xs font-medium text-white"
+                  style={{ background: BRAND_GRADIENT }}
+                >
                   Most popular
                 </span>
               )}
@@ -79,12 +93,13 @@ export function PricingTeaser() {
               ))}
             </ul>
             <Button
-              className="mt-6 w-full"
+              className={`mt-6 w-full ${p.pro ? "border-0 text-white" : ""}`}
               variant={p.pro ? "default" : "outline"}
               onClick={() =>
                 p.pro ? requestUpgrade() : navigate("/builder")
               }
               disabled={p.pro && isPro}
+              style={p.pro ? { background: BRAND_GRADIENT } : undefined}
             >
               {p.pro && isPro ? "Current plan" : p.cta}
             </Button>

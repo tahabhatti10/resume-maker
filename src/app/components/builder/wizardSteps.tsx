@@ -9,6 +9,7 @@ import {
   Link as LinkIcon,
   Palette,
   Download,
+  Eye,
 } from "lucide-react";
 import { ContactStep } from "./steps/ContactStep";
 import { SummaryStep } from "./steps/SummaryStep";
@@ -19,6 +20,7 @@ import { ProjectsStep } from "./steps/ProjectsStep";
 import { LinksStep } from "./steps/LinksStep";
 import { DesignStep } from "./DesignStep";
 import { ExportPanel } from "./ExportPanel";
+import { ResumePreviewStep } from "./ResumePreviewStep";
 
 export interface WizardStep {
   id: string;
@@ -36,5 +38,6 @@ export const wizardSteps: WizardStep[] = [
   { id: "projects", label: "Projects", icon: FolderGit2, Component: ProjectsStep },
   { id: "links", label: "Links", icon: LinkIcon, Component: LinksStep },
   { id: "design", label: "Design", icon: Palette, Component: DesignStep },
+  { id: "preview", label: "Preview", icon: Eye, Component: ResumePreviewStep },
   { id: "export", label: "Export", icon: Download, Component: ExportPanel },
 ];

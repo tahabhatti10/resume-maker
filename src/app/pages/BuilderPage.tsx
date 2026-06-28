@@ -5,12 +5,10 @@ import {
   ArrowRight,
   Sparkles,
   Crown,
-  Eye,
   Wand2,
 } from "lucide-react";
-import { Logo } from "../components/shared/Logo";
+import { Logo, BRAND_GRADIENT } from "../components/shared/Logo";
 import { Button } from "../components/ui/button";
-import { Progress } from "../components/ui/progress";
 import {
   Sheet,
   SheetContent,
@@ -20,7 +18,6 @@ import {
 } from "../components/ui/sheet";
 import { WizardNav } from "../components/builder/WizardNav";
 import { wizardSteps } from "../components/builder/wizardSteps";
-import { LivePreview } from "../components/builder/LivePreview";
 import { AssistantPanel } from "../components/ai/AssistantPanel";
 import { AdSlot } from "../components/monetization/AdSlot";
 import { ProGate } from "../components/monetization/ProGate";
@@ -31,7 +28,6 @@ import { useBuilder } from "../state/BuilderContext";
 export function BuilderPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
-  const [previewOpen, setPreviewOpen] = useState(false);
   const { isPro } = useEntitlement();
   const { requestUpgrade } = useUpgrade();
   const { loadSample } = useBuilder();
@@ -58,24 +54,6 @@ export function BuilderPage() {
           >
             Load sample
           </Button>
-
-          {/* Mobile preview */}
-          <Sheet open={previewOpen} onOpenChange={setPreviewOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="sm" className="lg:hidden">
-                <Eye className="h-4 w-4" /> Preview
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="bottom" className="h-[85vh] p-0">
-              <SheetTitle className="sr-only">Resume preview</SheetTitle>
-              <SheetDescription className="sr-only">
-                A live preview of your resume website.
-              </SheetDescription>
-              <div className="h-full bg-muted/30">
-                <LivePreview />
-              </div>
-            </SheetContent>
-          </Sheet>
 
           {/* AI assistant */}
           <Sheet>
@@ -108,7 +86,12 @@ export function BuilderPage() {
               <Crown className="h-3.5 w-3.5" /> Pro
             </span>
           ) : (
-            <Button size="sm" onClick={() => requestUpgrade()}>
+            <Button
+              size="sm"
+              onClick={() => requestUpgrade()}
+              className="border-0 text-white"
+              style={{ background: BRAND_GRADIENT }}
+            >
               Go Pro
             </Button>
           )}
@@ -116,7 +99,7 @@ export function BuilderPage() {
       </header>
 
       {/* Body */}
-      <div className="grid flex-1 grid-cols-1 overflow-hidden lg:grid-cols-[230px_1fr_1fr]">
+      <div className="grid flex-1 grid-cols-1 overflow-hidden lg:grid-cols-[250px_1fr]">
         {/* Wizard nav */}
         <aside className="border-b border-border bg-background p-3 lg:border-b-0 lg:border-r">
           <WizardNav current={step} onSelect={setStep} />
@@ -136,7 +119,12 @@ export function BuilderPage() {
                 Step {step + 1} of {wizardSteps.length}
               </span>
             </div>
-            <Progress value={progress} className="mt-3" />
+            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full transition-all duration-300"
+                style={{ width: `${progress}%`, background: BRAND_GRADIENT }}
+              />
+            </div>
           </div>
           <div className="flex-1 overflow-auto px-6 py-5">
             <Current />
@@ -150,21 +138,25 @@ export function BuilderPage() {
               <ArrowLeft className="h-4 w-4" /> Back
             </Button>
             {isLast ? (
-              <Button onClick={() => navigate("/")}>
-                <Wand2 className="h-4 w-4" /> Finish
+              <Button
+                onClick={() => navigate("/")}
+                className="border-0 text-white"
+                style={{ background: BRAND_GRADIENT }}
+              >
+                <Wand2 className="h-4 w-4" /> Done
               </Button>
             ) : (
-              <Button onClick={() => setStep((s) => Math.min(wizardSteps.length - 1, s + 1))}>
+              <Button
+                onClick={() => setStep((s) => Math.min(wizardSteps.length - 1, s + 1))}
+                className="border-0 text-white"
+                style={{ background: BRAND_GRADIENT }}
+              >
                 Next <ArrowRight className="h-4 w-4" />
               </Button>
             )}
           </div>
         </main>
 
-        {/* Live preview (desktop) */}
-        <section className="hidden bg-muted/30 lg:block">
-          <LivePreview />
-        </section>
       </div>
     </div>
   );

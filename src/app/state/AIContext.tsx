@@ -7,7 +7,7 @@ import {
 } from "react";
 import type { ReactNode } from "react";
 import type { ResumeData } from "../lib/types";
-import { getGroqAssistantReply } from "../lib/ai/groqAssistant";
+import { mockAssistantReply } from "../lib/ai/mockAI";
 import { mockParseResume } from "../lib/ai/mockParseResume";
 import { makeId } from "../lib/sampleData";
 
@@ -49,16 +49,7 @@ export function AIProvider({ children }: { children: ReactNode }) {
     setMessages((m) => [...m, userMsg]);
     setPending(true);
 
-    let replyText = "I couldn't generate a reply right now.";
-
-    try {
-      replyText = await getGroqAssistantReply(text, files.length > 0);
-    } catch (error) {
-      console.error("Groq assistant error", error);
-      replyText =
-        "The AI assistant is not configured yet. Set VITE_GROQ_API_KEY in your environment to enable live replies.";
-    }
-
+    const replyText = await mockAssistantReply(text, files.length > 0);
     const suggestion =
       files.length > 0 ? mockParseResume(files[0].name) : undefined;
 
