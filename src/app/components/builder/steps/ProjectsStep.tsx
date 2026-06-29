@@ -53,6 +53,7 @@ export function ProjectsStep() {
               rows={2}
               onChange={(v) => updateItem("projects", p.id, { description: v })}
               placeholder="What it is and the impact it had."
+              aiPrompt="Rewrite this project description for a resume. Make it concise, achievement-focused, and professional."
             />
           </div>
           <div className="mt-3 space-y-1.5">

@@ -1,13 +1,16 @@
-import { Plus, Trash2, Wrench } from "lucide-react";
+import { Plus, Trash2, Wrench, Sparkles, Loader2 } from "lucide-react";
+import { useState } from "react";
 import { useBuilder } from "../../../state/BuilderContext";
 import { Button } from "../../ui/button";
 import { LabeledInput } from "../fields/Fields";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { EmptyHint } from "./ExperienceStep";
+import { generateWithGroq } from "../../../../lib/groq";
 
 export function SkillsStep() {
   const { resume, addSkill, updateItem, removeItem } = useBuilder();
+  const [loadingSkillId, setLoadingSkillId] = useState<string | null>(null);
 
   return (
     <div className="space-y-4">
@@ -40,7 +43,25 @@ export function SkillsStep() {
               placeholder="Design"
             />
             <div className="space-y-1.5">
-              <Label>Skills (comma separated)</Label>
+              <div className="flex items-center justify-between gap-2">
+                <Label>Skills (comma separated)</Label>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2 text-xs"
+                  disabled={loadingSkillId === g.id}
+                  onClick={async () => {
+                    setLoadingSkillId(g.id);
+                    const suggestion = await generateWithGroq(`Expand and professionalize this skills list for a resume. Return a polished comma-separated list of skills.\n\nCurrent text: ${g.items.join(", ")}`);
+                    updateItem("skills", g.id, { items: suggestion.split(",").map((s) => s.trim()).filter(Boolean) });
+                    setLoadingSkillId(null);
+                  }}
+                >
+                  {loadingSkillId === g.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                  AI Suggest ✨
+                </Button>
+              </div>
               <Input
                 value={g.items.join(", ")}
                 placeholder="Figma, Prototyping, Research"

@@ -12,6 +12,7 @@ export function SummaryStep() {
         onChange={setSummary}
         rows={6}
         placeholder="2–4 sentences on who you are, your strengths, and the impact you've made."
+        aiPrompt="Write a professional resume summary for this candidate. Keep it concise, confident, and tailored to the target role."
       />
       <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
         <Sparkles className="h-3.5 w-3.5" />

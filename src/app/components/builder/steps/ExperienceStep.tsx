@@ -1,13 +1,16 @@
-import { Plus, Trash2, Briefcase } from "lucide-react";
+import { Plus, Trash2, Briefcase, Sparkles, Loader2 } from "lucide-react";
+import { useState } from "react";
 import { useBuilder } from "../../../state/BuilderContext";
 import { Button } from "../../ui/button";
 import { Label } from "../../ui/label";
 import { Switch } from "../../ui/switch";
 import { Textarea } from "../../ui/textarea";
 import { LabeledInput } from "../fields/Fields";
+import { generateWithGroq } from "../../../../lib/groq";
 
 export function ExperienceStep() {
   const { resume, addExperience, updateItem, removeItem } = useBuilder();
+  const [loadingExperienceId, setLoadingExperienceId] = useState<string | null>(null);
 
   return (
     <div className="space-y-4">
@@ -38,6 +41,7 @@ export function ExperienceStep() {
               value={e.role}
               onChange={(v) => updateItem("experience", e.id, { role: v })}
               placeholder="Senior Designer"
+              aiPrompt="Suggest a polished professional job title for this experience entry."
             />
             <LabeledInput
               label="Company"
@@ -87,6 +91,24 @@ export function ExperienceStep() {
                 })
               }
             />
+            <div className="pt-2">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-xs"
+                disabled={loadingExperienceId === e.id}
+                onClick={async () => {
+                  setLoadingExperienceId(e.id);
+                  const suggestion = await generateWithGroq(`Rewrite this work experience into strong resume bullet points. Keep them concise, measurable, and achievement-focused.\n\nCurrent details: ${e.role} at ${e.company}. ${e.bullets.join(" ")}`);
+                  updateItem("experience", e.id, { bullets: suggestion.split(/\n|\r\n/).map((line) => line.replace(/^[-•]\s*/, "")).filter(Boolean) });
+                  setLoadingExperienceId(null);
+                }}
+              >
+                {loadingExperienceId === e.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                AI Suggest ✨
+              </Button>
+            </div>
           </div>
         </div>
       ))}

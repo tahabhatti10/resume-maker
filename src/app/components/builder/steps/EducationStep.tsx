@@ -71,6 +71,7 @@ export function EducationStep() {
               rows={2}
               onChange={(v) => updateItem("education", ed.id, { details: v })}
               placeholder="Honors, GPA, relevant coursework…"
+              aiPrompt="Turn this education entry into polished resume-friendly details. Keep it concise and professional."
             />
           </div>
         </div>

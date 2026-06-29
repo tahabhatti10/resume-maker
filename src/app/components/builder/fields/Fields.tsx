@@ -1,6 +1,10 @@
+import { Sparkles, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { Button } from "../../ui/button";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { Textarea } from "../../ui/textarea";
+import { generateWithGroq } from "../../../../lib/groq";
 
 interface LabeledInputProps {
   label: string;
@@ -8,6 +12,7 @@ interface LabeledInputProps {
   onChange: (v: string) => void;
   placeholder?: string;
   type?: string;
+  aiPrompt?: string;
 }
 
 export function LabeledInput({
@@ -16,10 +21,36 @@ export function LabeledInput({
   onChange,
   placeholder,
   type = "text",
+  aiPrompt,
 }: LabeledInputProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAiSuggest = async () => {
+    if (!aiPrompt) return;
+    setIsLoading(true);
+    const suggestion = await generateWithGroq(`${aiPrompt}\n\nCurrent text: ${value || ""}`);
+    onChange(suggestion);
+    setIsLoading(false);
+  };
+
   return (
     <div className="space-y-1.5">
-      <Label>{label}</Label>
+      <div className="flex items-center justify-between gap-2">
+        <Label>{label}</Label>
+        {aiPrompt && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleAiSuggest}
+            disabled={isLoading}
+            className="h-7 px-2 text-xs"
+          >
+            {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+            AI Suggest ✨
+          </Button>
+        )}
+      </div>
       <Input
         type={type}
         value={value}
@@ -36,6 +67,7 @@ interface LabeledTextareaProps {
   onChange: (v: string) => void;
   placeholder?: string;
   rows?: number;
+  aiPrompt?: string;
 }
 
 export function LabeledTextarea({
@@ -44,10 +76,36 @@ export function LabeledTextarea({
   onChange,
   placeholder,
   rows = 4,
+  aiPrompt,
 }: LabeledTextareaProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAiSuggest = async () => {
+    if (!aiPrompt) return;
+    setIsLoading(true);
+    const suggestion = await generateWithGroq(`${aiPrompt}\n\nCurrent text: ${value || ""}`);
+    onChange(suggestion);
+    setIsLoading(false);
+  };
+
   return (
     <div className="space-y-1.5">
-      <Label>{label}</Label>
+      <div className="flex items-center justify-between gap-2">
+        <Label>{label}</Label>
+        {aiPrompt && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleAiSuggest}
+            disabled={isLoading}
+            className="h-7 px-2 text-xs"
+          >
+            {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+            AI Suggest ✨
+          </Button>
+        )}
+      </div>
       <Textarea
         value={value}
         rows={rows}
