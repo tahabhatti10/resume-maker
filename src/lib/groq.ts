@@ -1,16 +1,16 @@
-import Groq from "groq-sdk";
-
-const groq = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
-
 export async function generateWithGroq(prompt: string): Promise<string> {
-  if (!import.meta.env.VITE_GROQ_API_KEY) {
+  const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+  if (!apiKey) {
     return "AI is not configured yet. Add VITE_GROQ_API_KEY to your environment.";
   }
 
   try {
+    const { default: Groq } = await import("groq-sdk");
+    const groq = new Groq({
+      apiKey,
+      dangerouslyAllowBrowser: true,
+    });
+
     const completion = await groq.chat.completions.create({
       model: "llama3-70b-8192",
       messages: [
